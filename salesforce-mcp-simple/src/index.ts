@@ -389,17 +389,21 @@ app.post("/message", async (req: Request, res: Response) => {
   res.status(200).send();
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`\n🚀 Salesforce MCP Server Started`);
-  console.log(`📍 Port: ${PORT}`);
-  console.log(`🌐 URL: http://localhost:${PORT}`);
-  console.log(`🔌 SSE: http://localhost:${PORT}/sse`);
-  console.log(`💚 Health: http://localhost:${PORT}/health\n`);
-});
+// Start server if not running in Vercel
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`\n🚀 Salesforce MCP Server Started`);
+    console.log(`📍 Port: ${PORT}`);
+    console.log(`🌐 URL: http://localhost:${PORT}`);
+    console.log(`🔌 SSE: http://localhost:${PORT}/sse`);
+    console.log(`💚 Health: http://localhost:${PORT}/health\n`);
+  });
+}
 
 // Graceful shutdown
 process.on("SIGINT", () => {
   console.log("\n👋 Shutting down gracefully...");
   process.exit(0);
 });
+
+export default app;
